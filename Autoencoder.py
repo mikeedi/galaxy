@@ -1,0 +1,92 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class Encoder(nn.Module):
+    """Encoder implementation"""
+    def __init__(self, code_size):
+        super(Encoder, self).__init__()
+        self.code_size = code_size
+        self.conv_block_1 = nn.Sequential(
+            nn.Conv2d(3, 32, kernel_size=(3, 3), padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2, 2))
+        )
+        self.conv_block_2 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(3, 3), padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2, 2))
+        )
+        self.conv_block_3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=(3, 3), padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2, 2))
+        )
+        self.conv_block_4 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=(3, 3), padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2, 2))
+        )
+        self.dense = nn.Linear(256*16*16, self.code_size)
+
+    def forward(self, x):
+        x = self.conv_block_1(x)
+        x = self.conv_block_2(x)
+        x = self.conv_block_3(x)
+        x = self.conv_block_4(x)
+        x = x.view(x.size(0), -1)
+        x = self.dense(x)
+        return x
+
+class Decoder(nn.Module):
+    """Decoder implementation"""
+    def __init__(self, code_size):
+        super(Decoder, self).__init__()
+        self.code_size = code_size
+        self.dense = nn.Linear(self.code_size, 256*16*16)
+        self.deconv_block_1 = nn.Sequential(
+            nn.ConvTranspose2d(256, 256, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ReLU()
+        )
+        self.deconv_block_2 = nn.Sequential(
+            nn.ConvTranspose2d(256, 128, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ReLU()
+        )
+        self.deconv_block_3 = nn.Sequential(
+            nn.ConvTranspose2d(128, 64, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ReLU()
+        )
+        self.deconv_block_4 = nn.Sequential(
+            nn.ConvTranspose2d(64, 32, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ReLU()
+        )
+        self.deconv_out = nn.Sequential(
+            nn.ConvTranspose2d(32, 3, kernel_size=(3, 3), padding=1, stride=1),
+        )
+
+    def forward(self, x):
+        x = self.dense(x)
+        x = x.view(x.size(0), 256, 16, 16)
+        x = self.deconv_block_1(x)
+        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = self.deconv_block_2(x)
+        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = self.deconv_block_3(x)
+        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = self.deconv_block_4(x)
+        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = self.deconv_out(x)
+        return x
+
+class Autoencoder(nn.Module):
+    """Autoencoder implementation"""
+    def __init__(self, code_size):
+        super(Autoencoder, self).__init__()
+        self.code_size = code_size
+        self.encoder = Encoder(code_size)
+        self.decoder = Decoder(code_size)
+
+    def forward(self, x):
+        code = self.encoder(x)
+        decode = self.decoder(code)
+        return decode
