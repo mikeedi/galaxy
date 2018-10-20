@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.nn as nn
 import torch
 import numpy as np
+import matplotlib.pyplot as plt
 
 from Autoencoder import Autoencoder
 from dataloader import dataloader

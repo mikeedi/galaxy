@@ -1,4 +1,6 @@
 from dataloader import mean, std
+import matplotlib.pyplot as plts
+from skimage import io
 
 def show_image(img, mean=mean, std=std):
     image = img * std + mean
