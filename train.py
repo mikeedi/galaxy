@@ -50,7 +50,7 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
 
             # print statistics
             running_loss += loss.item()
-            if i % (steps - 1) == steps - 1:  # print every steps mini-batches
+            if i % steps == steps - 1:  # print every steps mini-batches
                 print('[{}, {}] training loss: {}'.format
                           (epoch + 1, i + 1, running_loss/steps))
         train_loss_save.append(running_loss / len(inputs))
