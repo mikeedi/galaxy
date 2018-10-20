@@ -27,6 +27,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
 
     train_loader, test_loader = dataloader(root=root, batch_size=batch_size, train_size=train_size)
 
+    print('Train-size: ', len(train_loader))
+    print('Test-size: ', len(test_loader))
     print('------TRAIN-STARTED------')
     for epoch in range(num_epochs):  # loop over the dataset multiple times
 
@@ -59,6 +61,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
         if train_size == 1.:
             continue
 
+        optimizer.zero_grad()
+
         # validation step
         for i, data in enumerate(test_loader, 0):
             # get the inputs
@@ -85,6 +89,7 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
                 plt.subplot(1, 2, 2)
                 show_image(np.swapaxes(predict_image.numpy(), 0, 2))
                 plt.savefig('images/{}_{}'.format(epoch, i))
+        torch.save(model, save_path+str(epoch))
 
 
     print('Finished Training')
