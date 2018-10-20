@@ -90,7 +90,7 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
                         image = image.cuda()
                     plt.subplot(1, 2, 1)
                     show_image(np.swapaxes(image.numpy(), 0, 2))
-                    predict_image = model(image[None])[0].detach()
+                    predict_image = model(image[None])[0].detach().cpu()
                     plt.subplot(1, 2, 2)
                     show_image(np.swapaxes(predict_image.numpy(), 0, 2))
                     plt.savefig('images/{}_{}'.format(epoch, i))
