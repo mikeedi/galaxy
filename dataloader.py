@@ -23,7 +23,7 @@ data_transform = transforms.Compose([
 def dataloader(root='data/', batch_size=32, shuffle=True, train_size=0.8):
 
     if not os.path.exists(root):
-        raise FileNotFoundError("image files was't found")
+        raise FileNotFoundError("image files was't found: ", root)
 
     dataset = datasets.ImageFolder(root=root,
                               transform=data_transform)
