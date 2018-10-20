@@ -9,7 +9,7 @@ from dataloader import dataloader
 from utils import show_image
 
 def train(num_epochs=30, batch_size=64, use_cuda=True, code_size=64,
-                train_size=0.75, steps=2000, save_images=True):
+                train_size=0.75, steps=2000, save_images=True, save_path='Autoencoder.pt'):
 
     if train_size > 1.:
         raise ValueError("train_size could not be more 1")
@@ -86,7 +86,7 @@ def train(num_epochs=30, batch_size=64, use_cuda=True, code_size=64,
     print('Finished Training')
     print('Best train epoch: ', np.argmax(train_loss_save), np.max(train_loss_save))
     print('Best test epoch: ', np.argmax(test_loss_save), np.max(test_loss_save))
-    torch.save(model, 'Autoencoder.pt')
+    torch.save(model, save_path)
 
 
 if __name__ == '__main__':
