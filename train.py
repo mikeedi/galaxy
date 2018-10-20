@@ -27,8 +27,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
 
     train_loader, test_loader = dataloader(root=root, batch_size=batch_size, train_size=train_size)
 
-    print('Train-size: ', len(train_loader))
-    print('Test-size: ', len(test_loader))
+    print('Train-size: ', len(train_loader) * batch_size)
+    print('Test-size: ', len(test_loader) * batch_size)
     print('------TRAIN-STARTED------')
     for epoch in range(num_epochs):  # loop over the dataset multiple times
 
@@ -66,13 +66,9 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
         for i, data in enumerate(test_loader, 0):
             # get the inputs
             inputs, _ = data
-            if use_cuda:
-                inputs = inputs.cuda()
-
-            optimizer.zero_grad()
 
             # forward only
-            outputs = model(inputs)
+            outputs = model.cpu()(inputs)
             loss = criterion(outputs, inputs)
 
             # print statistics
