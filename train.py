@@ -86,6 +86,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
             if save_images:
                 for i in np.random.random_integers(0, len(test_loader), 10):
                     image, _ = test_loader.sampler.data_source.dataset[i]
+                    if use_cuda:
+                        image = image.cuda()
                     plt.subplot(1, 2, 1)
                     show_image(np.swapaxes(image.numpy(), 0, 2))
                     predict_image = model(image[None])[0].detach()
