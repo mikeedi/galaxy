@@ -63,7 +63,7 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
 
 
         # validation step
-        with torch.no_grad()
+        with torch.no_grad():
             for i, data in enumerate(test_loader, 0):
                 # get the inputs
                 inputs, _ = data
