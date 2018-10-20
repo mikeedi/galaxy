@@ -63,32 +63,35 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
 
 
         # validation step
-        for i, data in enumerate(test_loader, 0):
-            # get the inputs
-            inputs, _ = data
+        with torch.no_grad()
+            for i, data in enumerate(test_loader, 0):
+                # get the inputs
+                inputs, _ = data
+                if use_cuda:
+                    inputs = inputs.cuda()
 
-            # forward only
-            outputs = model.cpu()(inputs)
-            loss = criterion(outputs, inputs)
+                # forward only
+                outputs = model(inputs)
+                loss = criterion(outputs, inputs)
 
-            # print statistics
-            running_loss += loss.item()
-        test_loss_save.append(running_loss/len(test_loader))
-        print('validation loss: %.8f' % (train_loss_save[-1]))
-        if not os.path.exists('images/'):
-            os.mkdir('images/')
-        if save_images:
-            for i in np.random.random_integers(0, len(test_loader), 10):
-                image, _ = test_loader[i]
-                plt.subplot(1, 2, 1)
-                show_image(np.swapaxes(image.numpy(), 0, 2))
-                predict_image = model(image[None])[0].detach()
-                plt.subplot(1, 2, 2)
-                show_image(np.swapaxes(predict_image.numpy(), 0, 2))
-                plt.savefig('images/{}_{}'.format(epoch, i))
-        torch.save(model, save_path+str(epoch))
-        if epoch > 0:
-            os.remove(save_path+str(epoch - 1))
+                # print statistics
+                running_loss += loss.item()
+            test_loss_save.append(running_loss/len(test_loader))
+            print('validation loss: %.8f' % (train_loss_save[-1]))
+            if not os.path.exists('images/'):
+                os.mkdir('images/')
+            if save_images:
+                for i in np.random.random_integers(0, len(test_loader), 10):
+                    image, _ = test_loader[i]
+                    plt.subplot(1, 2, 1)
+                    show_image(np.swapaxes(image.numpy(), 0, 2))
+                    predict_image = model(image[None])[0].detach()
+                    plt.subplot(1, 2, 2)
+                    show_image(np.swapaxes(predict_image.numpy(), 0, 2))
+                    plt.savefig('images/{}_{}'.format(epoch, i))
+            torch.save(model, save_path+str(epoch))
+            if epoch > 0:
+                os.remove(save_path+str(epoch - 1))
 
 
     print('Finished Training')
@@ -113,7 +116,7 @@ if __name__ == '__main__':
                         help='code size (default: 64)')
     parser.add_argument('--train-size', type=float, default=0.75, metavar='TS',
                         help='train size (default: 0.75); between 0 to 1; if 1 then without validating')
-    parser.add_argument('--steps', type=int, default=200, metavar='ST',
+    parser.add_argument('--steps', type=int, default=20, metavar='ST',
                         help='print statistics every steps (default: 200)')
     parser.add_argument('--save-images', type=bool, default=True, metavar='CUDA',
                         help='save images after and before autoencoder (default: True)')
