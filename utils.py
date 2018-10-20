@@ -1,5 +1,5 @@
 from dataloader import mean, std
-import matplotlib.pyplot as plts
+import matplotlib.pyplot as plt
 from skimage import io
 import numpy as np
 
