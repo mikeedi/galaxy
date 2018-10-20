@@ -90,6 +90,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
                 show_image(np.swapaxes(predict_image.numpy(), 0, 2))
                 plt.savefig('images/{}_{}'.format(epoch, i))
         torch.save(model, save_path+str(epoch))
+        if epoch > 0:
+            os.remove(save_path+str(epoch - 1))
 
 
     print('Finished Training')
