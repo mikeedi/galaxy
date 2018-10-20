@@ -10,7 +10,7 @@ from dataloader import dataloader
 from utils import show_image
 
 def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=64,
-                train_size=0.75, steps=200, save_images=True, save_path='Autoencoder.pt'):
+                train_size=0.9, steps=20, save_images=True, save_path='Autoencoder.pt'):
 
     if train_size > 1.:
         raise ValueError("train_size could not be more 1: ", train_size)
@@ -61,7 +61,6 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
         if train_size == 1.:
             continue
 
-        optimizer.zero_grad()
 
         # validation step
         for i, data in enumerate(test_loader, 0):
@@ -69,6 +68,8 @@ def train(root='data/', num_epochs=30, batch_size=64, use_cuda=True, code_size=6
             inputs, _ = data
             if use_cuda:
                 inputs = inputs.cuda()
+
+            optimizer.zero_grad()
 
             # forward only
             outputs = model(inputs)
