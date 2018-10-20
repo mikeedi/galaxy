@@ -5,6 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
 import torch.nn as nn
 import torch
+import numpy as np
 
 from Autoencoder import Autoencoder
 from dataloader import dataloader
