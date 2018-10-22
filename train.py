@@ -216,7 +216,12 @@ if __name__ == '__main__':
                         help='print statistics every log-interval (default: 20)')
     parser.add_argument('--save-images', type=bool, default=True, metavar='CUDA',
                         help='save images after and before autoencoder (default: True)')
-
+    parser.add_argument('--start-lr', type=float, default=0.001, metavar='LR',
+                        help='start learning rate (default: 0.001)')
+    parser.add_argument('--gamma', type=float, default=0.8, metavar='G',
+                        help='gamma in ExponentialLR (default: 0.8)')
+    parser.add_argument('--name-optim', type=str, default='Adam', metavar='OPTIM',
+                        help='optimizer (default: Adam)')
     parser.register('type', bool, (lambda x: x.lower() in ("yes", "true", "t", "1")))
     args = parser.parse_args()
 
@@ -227,5 +232,9 @@ if __name__ == '__main__':
     code_size = args.code_size
     log_interval = args.log_interval
     save_images = args.save_images
+    start_lr = args.start_lr
+    gamma = args.gamma
+    name_optim = args.name_optim
     train(root, num_epochs, batch_size, device, code_size,
-                    log_interval)
+                    log_interval, name_optim=name_optim,
+                    start_lr=start_lr, gamma=gamma, save_images=save_images)
