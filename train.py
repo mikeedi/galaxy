@@ -190,6 +190,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
             'start_learning_rate': start_lr,
             'gamma': gamma,
             'train_transform': str(train_transform),
+            'architectute': str(model)
         }
         with open('checkpoint/meta.json', 'w') as file:
             json.dump(meta_information, file)
