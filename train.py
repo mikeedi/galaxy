@@ -76,7 +76,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
         loss = criterion(x_pred, x)
         loss.backward()
         optimizer.step()
-        return loss.item() / len(batch)
+        return loss.item()
 
     trainer = Engine(process_function)
 
