@@ -130,7 +130,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
 
     def score_function(engine):
         val_avg_accuracy = engine.state.metrics['avg_loss']
-        return val_avg_accuracy
+        return -1 * val_avg_accuracy
 
     best_model_saver = ModelCheckpoint("best_models",  
                                        filename_prefix="model",
