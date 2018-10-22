@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 
 from torch.utils.data import Dataset, DataLoader
 from torch.optim.lr_scheduler import ExponentialLR
@@ -151,13 +152,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
     to_save = {
         "model": model, 
         "optimizer": optimizer, 
-        "lr_scheduler": lr_scheduler, 
-        'code_size': code_size,
-        'batch_size': batch_size,
-        'optimizer': name_optim,
-        'start_learning_rate': start_lr,
-        'gamma': gamma,
-        'train_transform': train_transform,
+        "lr_scheduler": lr_scheduler,
     } 
     trainer.add_event_handler(Events.ITERATION_COMPLETED, training_saver, to_save)
 
@@ -185,6 +180,19 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
                 plt.subplot(1, 2, 2)
                 show_image(np.swapaxes(predict_image.numpy(), 0, 2))
                 plt.savefig('images/{}_{}'.format(epoch, i))        
+
+    @trainer.on(Events.STARTED)
+    def save_all_information(engine):
+        meta_information = {
+            'code_size': code_size,
+            'batch_size': batch_size,
+            'optimizer': name_optim,
+            'start_learning_rate': start_lr,
+            'gamma': gamma,
+            'train_transform': str(train_transform),
+        }
+        with open('checkpoint/meta.json', 'w') as file:
+            json.dump(meta_information, file)
 
     trainer.run(train_loader, num_epochs)
     print('THE-END')
