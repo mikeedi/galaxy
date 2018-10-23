@@ -39,15 +39,15 @@ class Decoder(nn.Module):
         self.code_size = code_size
         self.dense = nn.Linear(self.code_size, 128*4*4)
         self.deconv_block_2 = nn.Sequential(
-            nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=1, stride=4),
+            nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=0, stride=4),
             nn.ReLU()
         )
         self.deconv_block_3 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, kernel_size=(3, 3), padding=1, stride=4),
+            nn.ConvTranspose2d(128, 64, kernel_size=(3, 3), padding=0, stride=4),
             nn.ReLU()
         )
         self.deconv_block_4 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, kernel_size=(3, 3), padding=1, stride=4),
+            nn.ConvTranspose2d(64, 32, kernel_size=(3, 3), padding=0, stride=4),
             nn.ReLU()
         )
         self.deconv_out = nn.Sequential(
