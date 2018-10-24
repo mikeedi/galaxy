@@ -29,14 +29,20 @@ val_transform = transforms.Compose([
                              std=std)
     ])
 
-def dataloader(root='data/', batch_size=32, shuffle=True):
+def dataloader(root='data/', batch_size=32, shuffle=True, transform=True):
 
     if not os.path.exists(root):
         raise FileNotFoundError("image files was't found: ", root)
 
-    train_dataset = datasets.ImageFolder(root=root + 'train/',
+    if transform:
+        train_dataset = datasets.ImageFolder(root=root + 'train/',
                                          transform=train_transform
                                         )
+    else:
+        train_dataset = datasets.ImageFolder(root=root + 'train/',
+                                         transform=val_transform
+                                        )
+    
     val_dataset = datasets.ImageFolder(root=root + 'val/',
                                          transform=val_transform
                                         )
