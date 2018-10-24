@@ -168,7 +168,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
         def save_before_and_after(engine):
             model.eval()
             epoch = engine.state.epoch
-            np.random.seed(1)
+            np.random.seed(42)
             print('Test model on 10 images...')
             for i in np.random.random_integers(0, len(val_loader), 10):
                 image, _ = val_loader.dataset[i]
