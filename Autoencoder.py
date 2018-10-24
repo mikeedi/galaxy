@@ -28,11 +28,11 @@ class Encoder(nn.Module):
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_5 = nn.Sequential(
-            nn.Conv2d(128, 256, kernel_size=(3, 3), padding=1),
+            nn.Conv2d(128, 128, kernel_size=(3, 3), padding=1),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
-        self.dense = nn.Linear(256*8*8, self.code_size)
+        self.dense = nn.Linear(128*8*8, self.code_size)
 
     def forward(self, x):
         x = self.conv_block_1(x)
@@ -42,6 +42,7 @@ class Encoder(nn.Module):
         x = self.conv_block_5(x)
         x = x.view(x.size(0), -1)
         x = self.dense(x)
+        x = F.tanh(x)
         return x
 
 class Decoder(nn.Module):
@@ -49,13 +50,13 @@ class Decoder(nn.Module):
     def __init__(self, code_size):
         super(Decoder, self).__init__()
         self.code_size = code_size
-        self.dense = nn.Linear(self.code_size, 256*8*8)
+        self.dense = nn.Linear(self.code_size, 128*8*8)
         self.deconv_block_1 = nn.Sequential(
-            nn.ConvTranspose2d(256, 256, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=1, stride=2),
             nn.ReLU()
         )
         self.deconv_block_2 = nn.Sequential(
-            nn.ConvTranspose2d(256, 128, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=1, stride=2),
             nn.ReLU()
         )
         self.deconv_block_3 = nn.Sequential(
@@ -76,7 +77,7 @@ class Decoder(nn.Module):
 
     def forward(self, x):
         x = self.dense(x)
-        x = x.view(x.size(0), 256, 8, 8)
+        x = x.view(x.size(0), 128, 8, 8)
         x = self.deconv_block_1(x)
         x = nn.functional.pad(x, (1, 0, 1, 0))
         x = self.deconv_block_2(x)
