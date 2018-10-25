@@ -42,7 +42,7 @@ class Encoder(nn.Module):
         x = self.conv_block_5(x)
         x = x.view(x.size(0), -1)
         x = self.dense(x)
-        x = F.normalize(x)
+        x = torch.tanh(x)
         return x
 
 class Decoder(nn.Module):
