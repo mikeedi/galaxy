@@ -192,8 +192,8 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
 
         with open('checkpoint/meta.json', 'w') as file:
             json.dump(meta_information, file)
- 
-        copyfile('Autoencoder.py', 'checkpoint/Autoencoder.py')
+
+        copyfile('galaxy/Autoencoder.py', 'checkpoint/Autoencoder.py')
 
     trainer.run(train_loader, num_epochs)
     print('THE-END')
