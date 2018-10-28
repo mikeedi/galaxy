@@ -197,8 +197,6 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
             copyfile('galaxy/Autoencoder.py', 'checkpoint/Autoencoder.py')
         except:
             copyfile('Autoencoder.py', 'checkpoint/Autoencoder.py')
-        except:
-            print('Not copy Autoencoder file')
 
     trainer.run(train_loader, num_epochs)
     print('THE-END')
