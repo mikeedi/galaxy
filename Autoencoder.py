@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 class Encoder(nn.Module):
     """Encoder implementation"""
@@ -38,7 +37,7 @@ class Encoder(nn.Module):
         )
         self.dense_2 = nn.Sequential(
             nn.Linear(2048, self.code_size),
-            nn.Tanh(),
+            nn.Softsign(),
         )
 
     def forward(self, x):
