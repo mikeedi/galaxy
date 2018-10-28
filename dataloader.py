@@ -13,9 +13,9 @@ image_size = 264
 # all transformation
 train_transform = transforms.Compose([
         transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(180),
         transforms.RandomVerticalFlip(),
-        transforms.ColorJitter(0, 0, 0, 0.1),
+        transforms.RandomRotation(180),
+        transforms.RandomAffine(0, translate=(0, 0.1)),
         transforms.Resize(256),        
         transforms.ToTensor(),
         transforms.Normalize(mean=mean,
