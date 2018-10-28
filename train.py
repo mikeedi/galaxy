@@ -1,6 +1,7 @@
 import argparse
 import os
 import json
+from shutil import copyfile
 
 from torch.utils.data import Dataset, DataLoader
 from torch.optim.lr_scheduler import ExponentialLR
@@ -101,7 +102,6 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
     @trainer.on(Events.EPOCH_COMPLETED)
     def compute_and_display_offline_train_metrics(engine):
         epoch = engine.state.epoch
-        print("Compute train metrics...")
         metrics = train_evaluator.run(train_eval_loader).metrics
         print("Training Results - Epoch: {}  Average Loss: {:.4f}"
               .format(engine.state.epoch, 
@@ -110,7 +110,6 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
     @trainer.on(Events.EPOCH_COMPLETED)
     def compute_and_display_val_metrics(engine):
         epoch = engine.state.epoch
-        print("Compute validation metrics...")
         metrics = val_evaluator.run(val_loader).metrics
         print("Validation Results - Epoch: {}  Average Loss: {:.4f}"
               .format(engine.state.epoch, 
@@ -136,8 +135,8 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
                                        filename_prefix="model",
                                        score_name="val_accuracy",  
                                        score_function=score_function,
-                                       n_saved=3,
-                                       save_as_state_dict=False,
+                                       n_saved=2,
+                                       save_as_state_dict=True,
                                        create_dir=True)
     val_evaluator.add_event_handler(Events.COMPLETED, 
                                     best_model_saver, 
@@ -145,9 +144,9 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
 
     training_saver = ModelCheckpoint("checkpoint",
                                      filename_prefix="checkpoint",
-                                     save_interval=1000,
-                                     n_saved=10,
-                                     save_as_state_dict=False,
+                                     save_interval=2000,
+                                     n_saved=1,
+                                     save_as_state_dict=True,
                                      create_dir=True)
     to_save = {
         "model": model, 
@@ -168,8 +167,7 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
         def save_before_and_after(engine):
             model.eval()
             epoch = engine.state.epoch
-            np.random.seed(42)
-            print('Test model on 10 images...')
+            np.random.seed(46)
             for i in np.random.random_integers(0, len(val_loader), 10):
                 image, _ = val_loader.dataset[i]
                 image = image.to(device)
@@ -190,10 +188,12 @@ def train(root='data/', num_epochs=30, batch_size=64, device='cuda',
             'start_learning_rate': start_lr,
             'gamma': gamma,
             'train_transform': str(train_transform),
-            'architectute': str(model)
         }
+
         with open('checkpoint/meta.json', 'w') as file:
             json.dump(meta_information, file)
+ 
+        copyfile('Autoencoder.py', 'checkpoint/Autoencoder.py')
 
     trainer.run(train_loader, num_epochs)
     print('THE-END')
