@@ -8,19 +8,19 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.code_size = code_size
         self.conv_block_1 = nn.Sequential(
-            nn.Conv2d(3, 16, kernel_size=(7, 7), padding=3),
+            nn.Conv2d(3, 16, kernel_size=(5, 5), padding=2),
             nn.BatchNorm2d(16),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=(7, 7), padding=3),
+            nn.Conv2d(16, 32, kernel_size=(3, 3), padding=1),
             nn.BatchNorm2d(32),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_3 = nn.Sequential(
-            nn.Conv2d(32, 64, kernel_size=(5, 5), padding=2),
+            nn.Conv2d(32, 64, kernel_size=(3, 3), padding=1),
             nn.BatchNorm2d(64),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
