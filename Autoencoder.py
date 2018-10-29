@@ -86,12 +86,12 @@ class Decoder(nn.Module):
             nn.ELU()
         )
         self.deconv_block_4 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ConvTranspose2d(64, 32, kernel_size=(5, 5), padding=2, stride=2),
             nn.BatchNorm2d(32),
             nn.ELU()
         )
         self.deconv_block_5 = nn.Sequential(
-            nn.ConvTranspose2d(32, 16, kernel_size=(3, 3), padding=1, stride=2),
+            nn.ConvTranspose2d(32, 16, kernel_size=(5, 5), padding=2, stride=2),
             nn.BatchNorm2d(16),
             nn.ELU()
         )
