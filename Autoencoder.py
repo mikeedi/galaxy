@@ -9,26 +9,31 @@ class Encoder(nn.Module):
         self.code_size = code_size
         self.conv_block_1 = nn.Sequential(
             nn.Conv2d(3, 16, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(16),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_2 = nn.Sequential(
             nn.Conv2d(16, 32, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(32),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_3 = nn.Sequential(
             nn.Conv2d(32, 64, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(64),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_4 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(128),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_5 = nn.Sequential(
             nn.Conv2d(128, 128, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(128),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
@@ -67,22 +72,27 @@ class Decoder(nn.Module):
         )
         self.deconv_block_1 = nn.Sequential(
             nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=1, stride=2),
+            nn.BatchNorm2d(128),
             nn.ELU()
         )
         self.deconv_block_2 = nn.Sequential(
             nn.ConvTranspose2d(128, 128, kernel_size=(3, 3), padding=1, stride=2),
+            nn.BatchNorm2d(128),
             nn.ELU()
         )
         self.deconv_block_3 = nn.Sequential(
             nn.ConvTranspose2d(128, 64, kernel_size=(3, 3), padding=1, stride=2),
+            nn.BatchNorm2d(64),
             nn.ELU()
         )
         self.deconv_block_4 = nn.Sequential(
             nn.ConvTranspose2d(64, 32, kernel_size=(3, 3), padding=1, stride=2),
+            nn.BatchNorm2d(32),
             nn.ELU()
         )
         self.deconv_block_5 = nn.Sequential(
             nn.ConvTranspose2d(32, 16, kernel_size=(3, 3), padding=1, stride=2),
+            nn.BatchNorm2d(16),
             nn.ELU()
         )
         self.deconv_out = nn.Sequential(
