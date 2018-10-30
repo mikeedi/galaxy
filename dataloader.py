@@ -8,7 +8,6 @@ import numpy as np
 # mean and standart deviation of all dataset
 mean = [0.0804, 0.0667, 0.0513]
 std = [0.1367, 0.1182, 0.0818]
-image_size = 264
 
 # all transformation
 train_transform = transforms.Compose([
