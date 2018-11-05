@@ -7,43 +7,43 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.code_size = code_size
         self.conv_block_1 = nn.Sequential(
-            nn.Conv2d(3, 256, kernel_size=(5, 5), padding=2),
-            nn.BatchNorm2d(256),
+            nn.Conv2d(3, 48, kernel_size=(5, 5), padding=2),
+            nn.BatchNorm2d(48),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_2 = nn.Sequential(
-            nn.Conv2d(256, 128, kernel_size=(3, 3), padding=1),
-            nn.BatchNorm2d(128),
-            nn.ELU(),
-            nn.MaxPool2d(kernel_size=(2, 2))
-        )
-        self.conv_block_3 = nn.Sequential(
-            nn.Conv2d(128, 64, kernel_size=(3, 3), padding=1),
+            nn.Conv2d(48, 64, kernel_size=(3, 3), padding=1),
             nn.BatchNorm2d(64),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
+        self.conv_block_3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=(3, 3), padding=1),
+            nn.BatchNorm2d(128),
+            nn.ELU(),
+            nn.MaxPool2d(kernel_size=(2, 2))
+        )
         self.conv_block_4 = nn.Sequential(
-            nn.Conv2d(64, 32, kernel_size=(3, 3), padding=1),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(128, 128, kernel_size=(3, 3), padding=1),
+            nn.BatchNorm2d(128),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
         self.conv_block_5 = nn.Sequential(
-            nn.Conv2d(32, 16, kernel_size=(3, 3), padding=1),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(128, 128, kernel_size=(3, 3), padding=1),
+            nn.BatchNorm2d(128),
             nn.ELU(),
             nn.MaxPool2d(kernel_size=(2, 2))
         )
 
-        self.dense_1 = nn.Sequential(
-            nn.Linear(16*8*8, 16*8*4),
-            nn.BatchNorm1d(16*8*4),
-            nn.ELU()
-        )
+        # self.dense_1 = nn.Sequential(
+        #     nn.Linear(16*8*8, 16*8*4),
+        #     nn.BatchNorm1d(16*8*4),
+        #     nn.ELU()
+        # )
         self.dense_2 = nn.Sequential(
-            nn.Linear(16*8*4, self.code_size),
+            nn.Linear(128*8*8, self.code_size),
             nn.Tanh()
         )
 
@@ -54,7 +54,7 @@ class Encoder(nn.Module):
         x = self.conv_block_4(x)
         x = self.conv_block_5(x)
         x = x.view(x.size(0), -1)
-        x = self.dense_1(x)
+        # x = self.dense_1(x)
         x = self.dense_2(x)
         return x
 
@@ -63,13 +63,13 @@ class Decoder(nn.Module):
     def __init__(self, code_size):
         super(Decoder, self).__init__()
         self.code_size = code_size
-        self.dense_1 = nn.Sequential( 
-            nn.Linear(self.code_size, 512),
-            nn.BatchNorm1d(512),
-            nn.ELU()
-        )
+        # self.dense_1 = nn.Sequential( 
+        #     nn.Linear(self.code_size, 512),
+        #     nn.BatchNorm1d(512),
+        #     nn.ELU()
+        # )
         self.dense_2 = nn.Sequential(
-            nn.Linear(512, 1024),
+            nn.Linear(self.code_size, 1024),
             nn.BatchNorm1d(1024),
             nn.ELU()
         )
@@ -103,19 +103,19 @@ class Decoder(nn.Module):
         )
 
     def forward(self, x):
-        x = self.dense_1(x)
+        # x = self.dense_1(x)
         x = self.dense_2(x)
         x = x.view(x.size(0), 16, 8, 8)
         x = self.deconv_block_1(x)
         x = nn.functional.pad(x, (1, 0, 1, 0))
         x = self.deconv_block_2(x)
-        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = nn.functional.pad(x, (0, 1, 0, 1))
         x = self.deconv_block_3(x)
-        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = nn.functional.pad(x, (0, 1, 0, 1))
         x = self.deconv_block_4(x)
         x = nn.functional.pad(x, (1, 0, 1, 0))
         x = self.deconv_block_5(x)
-        x = nn.functional.pad(x, (1, 0, 1, 0))
+        x = nn.functional.pad(x, (0, 1, 0, 1))
         x = self.deconv_out(x)
         return x
 
