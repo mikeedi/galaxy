@@ -241,3 +241,40 @@ if __name__ == '__main__':
     train(root, num_epochs, batch_size, device, code_size,
                     log_interval, name_optim=name_optim,
                     start_lr=start_lr, gamma=gamma, save_images=save_images)
+
+    
+    
+# train
+# for epoch in range(num_epochs):
+#     model.train()
+#     for iteration, (batch, _) in enumerate(train_loader):
+        
+#         t_start = time.time()
+        
+#         batch = batch.to(device)
+#         optimizer.zero_grad()
+#         predict = model(batch)
+#         loss = criterion(batch, predict)
+#         loss.backward()
+#         optimizer.step()
+        
+#         if (iteration+1) % cfg.train.display_loss_step == 0:
+#             cost_time = time.time() - t_start
+#             print('Epoch:{:d}; Iteration:{:d}; MSE={:6f} mean_time={:5f}s'.format(
+#                 iteration+1, epoch+1, loss.item(), cost_time))
+            
+        
+#     if (epoch + 1) % cfg.val.eval_step == 0:
+#         model.eval()
+#         with torch.no_grad():
+#             for iteration, (batch, _) in enumerate(val_loader):
+                
+#                 t_start = time.time()
+#                 batch = batch.to(device)
+#                 predict = model(batch)
+#                 loss = criterion(batch, predict)
+#                 cost_time = time.time() - t_start
+#                 print('Epoch_Val:{:d}; Iteration:{:d}; MSE={:6f} mean_time={:5f}s'.format(
+#                     iteration+1, epoch+1, loss.item(), cost_time))
+            
+        
