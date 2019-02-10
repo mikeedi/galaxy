@@ -5,7 +5,7 @@ from torch.utils.data.dataset import Subset
 from torchvision import transforms, utils, datasets
 import numpy as np
 
-# mean and standart deviation of all dataset
+# mean and std of all dataset
 mean = [0.0804, 0.0667, 0.0513]
 std = [0.1367, 0.1182, 0.0818]
 
@@ -51,12 +51,17 @@ def dataloader(root='data/', batch_size=32, shuffle=True, transform=True):
     random_indices = np.random.permutation(indices)[:len(val_dataset)]
     train_subset = Subset(train_dataset, indices=random_indices)
 
+    # dataset for training
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size,
                              shuffle=shuffle
                             )
+    
+    # dataset for evaluation
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size,
                              shuffle=shuffle, drop_last=True
                             )
+    
+    # dataset from training dataset for evaluation with the same size of val_loader
     train_eval_loader = DataLoader(train_subset, batch_size=batch_size, 
                              shuffle=shuffle, drop_last=True
                             )
