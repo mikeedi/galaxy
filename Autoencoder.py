@@ -132,7 +132,7 @@ class Decoder(nn.Module):
         x = self.deconv_6(x)
         x = self.deconv_7(x)
 
-        x = F.upsample(x, size=(256,256))
+        x = F.interpolate(x, size=(256,256))
 
         x = self.conv_out(x)
 
