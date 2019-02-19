@@ -3,3 +3,4 @@ numpy==1.15.1
 torch>=1.0.0
 skimage==0.14.2
 ignite==1.1.0
+glog
