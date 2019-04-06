@@ -42,20 +42,6 @@ class Encoder(nn.Module):
                 )
 
 
-    def convolution_block2(self, x, input_size, output_size, kernel_size, mp_kernel_size=2, 
-                            padding=1, dilation=1, stride=1, bias=True):
-        """
-        input_size and output_size :: num of channel 
-        """
-
-        return nn.Sequential(
-                    nn.Conv2d(input_size, output_size, kernel_size=kernel_size, 
-                        padding=padding, dilation=dilation, stride=stride, bias=bias),
-                    nn.ELU(),
-                    nn.BatchNorm2d(output_size),
-                    nn.MaxPool2d(kernel_size=mp_kernel_size)
-                )(x)
-
     def forward(self, x):
 
         # 6 convolution blocks on tensor with shape 256x256x3
