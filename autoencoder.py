@@ -27,8 +27,8 @@ class Encoder(nn.Module):
         return nn.Sequential(
                     nn.Conv2d(input_size, output_size, kernel_size=kernel_size, 
                         padding=padding, dilation=dilation, stride=stride, bias=bias),
-                    nn.ELU(),
                     nn.BatchNorm2d(output_size),
+                    nn.ELU(),
                     nn.MaxPool2d(kernel_size=mp_kernel_size)
                 )
 
@@ -106,8 +106,8 @@ class Decoder(nn.Module):
                     nn.ConvTranspose2d(input_size, output_size, kernel_size=kernel_size,
                      padding=padding, output_padding=output_padding, 
                      stride=stride, dilation=dilation),
-                    nn.ELU(),
                     nn.BatchNorm2d(output_size),
+                    nn.ELU(),
                 )
 
     def dense_block(self, input_unit, output_unit):
