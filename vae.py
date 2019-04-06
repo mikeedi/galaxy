@@ -72,7 +72,7 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.latent_size = code_size
 
-        self.dense = self.dense_block(self.code_size, 512)
+        self.dense = self.dense_block(self.latent_size, 512)
         self.deconv_1 = self.deconvolution_block(512, 512, kernel_size=4, padding=0, stride=1, output_padding=0)
         self.deconv_2 = self.deconvolution_block(512, 256, kernel_size=3, padding=0, stride=2, output_padding=0)
         self.deconv_3 = self.deconvolution_block(256, 256, kernel_size=3, padding=0, stride=2, output_padding=0)
@@ -125,31 +125,31 @@ class Decoder(nn.Module):
 
         return x
 
-class VAE(nn.Module):
-    """Autoencoder implementation"""
+# class VAE(nn.Module):
+#     """Autoencoder implementation"""
 
-    def __init__(self, latent_size):
-        super(Autoencoder, self).__init__()
-        self.latent_size = latent_size
-        self.encoder = Encoder(latent_size)
-        self.decoder = Decoder(latent_size)
+#     def __init__(self, latent_size):
+#         super(Autoencoder, self).__init__()
+#         self.latent_size = latent_size
+#         self.encoder = Encoder(latent_size)
+#         self.decoder = Decoder(latent_size)
 
-    def forward(self, x):
-        z_mean, z_log_var = self.encoder(x)
+#     def forward(self, x):
+#         z_mean, z_log_var = self.encoder(x)
 
-        epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0., stddev=1.0)
-        return z_mean + K.exp(z_log_var / 2) * epsilon
+#         epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0., stddev=1.0)
+#         return z_mean + K.exp(z_log_var / 2) * epsilon
         
-        decode = self.decoder(code)
-        return decode  
+#         decode = self.decoder(code)
+#         return decode  
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    from torchsummary import summary
+#     from torchsummary import summary
 
-    au = VAE(128)
+#     au = VAE(128)
 
-    # summary(input_size=(3, 256, 256), model=Encoder(128))
-    # summary(input_size=(128,), model=Decoder(128))
+#     # summary(input_size=(3, 256, 256), model=Encoder(128))
+#     # summary(input_size=(128,), model=Decoder(128))
     
-    summary(input_size=(3, 256, 256), model=au)
+#     summary(input_size=(3, 256, 256), model=au)
