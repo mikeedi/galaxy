@@ -1,4 +1,4 @@
-from dataloader import val_transform
+from dataloader import val_transform, inference_transform_with_rotating
 from autoencoder import Encoder
 
 import os
@@ -49,15 +49,35 @@ def predict(image_path, weights, code_size=64, num=10, device='cpu', random_rota
     if not os.path.exists(image_path):
         raise FileNotFoundError
     image = PIL.Image.fromarray(io.imread(image_path))
-    tensor_image = val_transform(image)
-    tensor_image = tensor_image.to(device)
+    
+    if random_rotate:
+        best_distances = []
+        best_filenames_and_coords = []
+        for i in range(5):
+            # find similar num galaxies
+            tensor_image = inference_transform_with_rotating(image).to(device)
+            with torch.no_grad():
+                encoder_predict = encoder(tensor_image[None])
+            distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
+            distances =  distances[0]
+            filenames_and_coords = filenames_and_coords[0]
+            best_distances.extend(distances)
+            best_filenames_and_coords.extend(filenames_and_coords)
 
-    # find similar num galaxies
-    with torch.no_grad():
-        encoder_predict = encoder(tensor_image[None])
-    distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
-    distances = distances[0]
-    filenames_and_coords = filenames_and_coords[0]
+        best_distances = np.array(best_distances)
+        best_filenames_and_coords = np.array(best_filenames_and_coords)
+        inds = best_distances.argsort()
+        distances = best_distances[inds][:num]
+        filenames_and_coords = best_filenames_and_coords[inds][:num]
+    else:
+        tensor_image = val_transform(image).to(device)
+
+        # find similar num galaxies
+        with torch.no_grad():
+            encoder_predict = encoder(tensor_image[None])
+        distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
+        distances =  distances[0]
+        filenames_and_coords = filenames_and_coords[0]
 
     # save txt (id, coords and probability) and images in folder with the same name as image_path but without extension
     with open(image_name + '/coordinates.txt', 'w') as file:

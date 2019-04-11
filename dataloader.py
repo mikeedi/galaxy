@@ -48,6 +48,14 @@ val_transform = transforms.Compose([
                              std=std)
     ])
 
+inference_transform_with_rotating = transforms.Compose([
+        transforms.RandomRotation(180),
+        transforms.Resize(256),        
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean,
+                             std=std)
+    ])
+
 def dataloader(root='data/', batch_size=32, shuffle=True, transform=True, drop_last=True):
 
     if not os.path.exists(root):
