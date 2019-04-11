@@ -19,10 +19,14 @@ def get_image_path_by_id(idx):
     else:
         raise FileNotFoundError
 
-def similarity(encoder_predict, num):
-    codes = np.load('embedding/codes.64.npy')
-    filenames_and_coords = np.load('embedding/filenames.64.npy')
+def similarity(encoder_predict, num, code_size):
 
+    try:
+        codes = np.load('embedding/codes.{}.npy'.format(code_size))
+        filenames_and_coords = np.load('embedding/filenames.{}.npy'.format(code_size))
+    except:
+        raise FileNotFoundError('embedding/filenames.{}.npy'.format(code_size))
+    
     nn = NearestNeighbors()
     nn.fit(codes, y=filenames_and_coords)
 
@@ -51,7 +55,7 @@ def predict(image_path, weights, code_size=64, num=10, device='cpu', random_rota
     # find similar num galaxies
     with torch.no_grad():
         encoder_predict = encoder(tensor_image[None])
-    distances, filenames_and_coords = similarity(encoder_predict, num)
+    distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
     distances = distances[0]
     filenames_and_coords = filenames_and_coords[0]
 
