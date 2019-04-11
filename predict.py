@@ -10,6 +10,11 @@ from sklearn.neighbors import NearestNeighbors
 from skimage import io
 import torch
 
+def round_with_None(x):
+    if x is None:
+        return x
+    else:
+        return round(x, 5)
 
 def get_image_path_by_id(idx):
     if os.path.exists('data/train/data/' + idx):
@@ -85,8 +90,9 @@ def predict(image_path, weights, code_size=64, num=10, device='cpu', random_rota
             
             # get id and coordinate
             idx = fac[0]
-            ra = fac[1]
-            dec = fac[2]
+            ra = round_with_None(fac[1])
+            dec = round_with_None(fac[2])
+            dist = round_with_None(dist)
 
             # overwrite image in new folder
             path_read = get_image_path_by_id(idx)
