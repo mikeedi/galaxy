@@ -31,7 +31,6 @@ def similarity(encoder_predict, num, code_size):
     nn.fit(codes, y=filenames_and_coords)
 
     dist, idx = nn.kneighbors(encoder_predict, n_neighbors=num)
-    
     return dist, filenames_and_coords[idx]
 
 
@@ -57,7 +56,7 @@ def predict(image_path, weights, code_size=64, num=10, device='cpu', random_rota
             # find similar num galaxies
             tensor_image = inference_transform_with_rotating(image).to(device)
             with torch.no_grad():
-                encoder_predict = encoder(tensor_image[None])
+                encoder_predict = encoder(tensor_image[None]).cpu().numpy()
             distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
             distances =  distances[0]
             filenames_and_coords = filenames_and_coords[0]
@@ -74,7 +73,7 @@ def predict(image_path, weights, code_size=64, num=10, device='cpu', random_rota
 
         # find similar num galaxies
         with torch.no_grad():
-            encoder_predict = encoder(tensor_image[None])
+            encoder_predict = encoder(tensor_image[None]).cpu().numpy()
         distances, filenames_and_coords = similarity(encoder_predict, num, code_size)
         distances =  distances[0]
         filenames_and_coords = filenames_and_coords[0]
