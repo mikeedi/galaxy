@@ -33,4 +33,4 @@ Then galaxy from `data/` that mostly similar to source save in folder `587729752
 `None` - unknown coordinates  
 `0.0`  - probably source image contains in `data/`  
   
-Also see `use_examples.ipynb'
+Also see [use_examples.ipynb](https://github.com/mikeedi/galaxy/blob/master/use_examples.ipynb)
