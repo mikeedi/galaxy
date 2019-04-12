@@ -31,4 +31,6 @@ Then galaxy from `data/` that mostly similar to source save in folder `587729752
 587734304877641984 332.9705 0.10872 0.29448
 ```
 `None` - unknown coordinates  
-`0.0`  - probably source image contains in `data/`
+`0.0`  - probably source image contains in `data/`  
+  
+Also see `use_examples.ipynb'
