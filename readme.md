@@ -34,3 +34,7 @@ Then galaxy from `data/` that mostly similar to source save in folder `587729752
 `0.0`  - probably source image contains in `data/`  
   
 Also see [use_examples.ipynb](https://github.com/mikeedi/galaxy/blob/master/use_examples.ipynb)
+### Example
+
+* source image ![](examples/src.png)
+* predicted images ![](examples/grid.png)
