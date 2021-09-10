@@ -1,6 +1,6 @@
 # Find similar galaxies using autoencoder
 Train simple convolution autoencoder for getting vector representation of galaxy image. Then find similar vectors with cosine or l2 metrics and respectively image.
-More detailed in [abstract](https://github.com/mikeedi/galaxy/blob/master/abstract.pdf)
+More detail in [abstract](https://github.com/mikeedi/galaxy/blob/master/abstract.pdf) (for [Science and Progress 2018](https://www.g-risc.org/events/Science-and-Progress-2018.html))
 ## Install
 ```console
 git clone https://github.com/mikeedi/galaxy.git
